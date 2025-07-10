@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   Alert,
   FlatList,
@@ -11,42 +11,18 @@ import { Button } from "@/components/Button";
 import { Filter } from "@/components/Filter";
 import { Input } from "@/components/Input";
 import { Item } from "@/components/Item";
+import { type ItemStorage, itemsStorage } from "@/storage/itemsStorage";
 import { FilterStatus } from "@/types/FilterStatus";
 import { styles } from "./styles";
 
 const FILTER_STATUS: FilterStatus[] = [FilterStatus.PENDING, FilterStatus.DONE];
-// const ITEMS = [
-//   { id: "1", status: FilterStatus.DONE, description: "1 pacote de café" },
-//   {
-//     id: "2",
-//     status: FilterStatus.PENDING,
-//     description: "3 pacotes de macarrão",
-//   },
-//   { id: "3", status: FilterStatus.PENDING, description: "3 cebolas" },
-//   { id: "4", status: FilterStatus.DONE, description: "2 litros de leite" },
-//   { id: "5", status: FilterStatus.PENDING, description: "1 saco de arroz" },
-//   { id: "6", status: FilterStatus.DONE, description: "1 kg de feijão preto" },
-//   { id: "7", status: FilterStatus.PENDING, description: "5 tomates" },
-//   { id: "8", status: FilterStatus.DONE, description: "1 pote de margarina" },
-//   { id: "9", status: FilterStatus.PENDING, description: "1 dúzia de ovos" },
-//   { id: "10", status: FilterStatus.DONE, description: "1 kg de açúcar" },
-//   { id: "11", status: FilterStatus.PENDING, description: "1 garrafa de óleo" },
-//   {
-//     id: "12",
-//     status: FilterStatus.DONE,
-//     description: "1 pacote de farinha de trigo",
-//   },
-//   { id: "14", status: FilterStatus.DONE, description: "1 pacote de sal" },
-
-//   { id: "16", status: FilterStatus.DONE, description: "1 kg de batata" },
-// ];
 
 export function Home() {
   const [filter, setFilter] = useState(FilterStatus.PENDING);
   const [description, setDescription] = useState("");
-  const [items, setItems] = useState<any>([]);
+  const [items, setItems] = useState<ItemStorage[]>([]);
 
-  function handleAddItem() {
+  async function handleAddItem() {
     if (!description.trim()) {
       return Alert.alert(
         "Adicionar",
@@ -60,8 +36,27 @@ export function Home() {
       status: FilterStatus.PENDING,
     };
 
-    // setItems((prevState) => [...prevState, newItem]);
+    await itemsStorage.addItem(newItem);
+    await itemsByStatus();
+
+    setFilter(FilterStatus.PENDING);
+    setDescription("");
   }
+
+  async function itemsByStatus() {
+    try {
+      const response = await itemsStorage.getByStatus(filter);
+
+      setItems(response);
+    } catch (error) {
+      console.log(error);
+      Alert.alert("Erro", "Não foi possivel filtrar os itens.");
+    }
+  }
+
+  useEffect(() => {
+    itemsByStatus();
+  }, [filter]);
 
   return (
     <View style={styles.container}>
@@ -71,6 +66,7 @@ export function Home() {
         <Input
           placeholder="O que você precisa comprar?"
           onChangeText={(value) => setDescription(value)}
+          value={description}
         />
 
         <Button title="Adicionar" onPress={handleAddItem} />
