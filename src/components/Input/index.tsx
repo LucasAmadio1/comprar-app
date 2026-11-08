@@ -1,12 +1,12 @@
 import { TextInput, type TextInputProps } from "react-native";
-import { styles } from "./styles";
+import { colors } from "@/theme/colors";
 
-export function Input({ ...props }: TextInputProps) {
+export function Input({ className, ...props }: TextInputProps) {
   return (
     <TextInput
-      style={styles.container}
-      placeholderTextColor="#74798B"
+      placeholderTextColor={colors.gray[600]}
       {...props}
+      className={`h-12 w-full rounded-lg border border-gray-300 bg-white px-4 ${className ?? ""}`}
     />
   );
 }

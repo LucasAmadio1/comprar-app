@@ -6,22 +6,14 @@
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
-    "newArchEnabled": true,
-    "splash": {
-      "image": "./assets/splash-icon.png",
-      "resizeMode": "contain",
-      "backgroundColor": "#F2F0EF"
-    },
     "ios": {
       "supportsTablet": true
     },
     "android": {
       "adaptiveIcon": {
-        "package": "",
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#F2F0EF"
       },
-      "edgeToEdgeEnabled": true,
       "package": "com.lucasamadio.comprarapp"
     },
     "web": {
@@ -31,6 +23,17 @@
       "eas": {
         "projectId": "37b7cfe0-0ebf-4c77-91a8-147c68bc23a1"
       }
-    }
+    },
+    "plugins": [
+      [
+        "expo-splash-screen",
+        {
+          "image": "./assets/splash-icon.png",
+          "resizeMode": "contain",
+          "backgroundColor": "#F2F0EF",
+          "imageWidth": 200
+        }
+      ]
+    ]
   }
 }

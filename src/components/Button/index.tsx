@@ -3,16 +3,19 @@ import {
   TouchableOpacity,
   type TouchableOpacityProps,
 } from "react-native";
-import { styles } from "./styles";
 
 interface ButtonProps extends TouchableOpacityProps {
   title: string;
 }
 
-export function Button({ title, ...props }: ButtonProps) {
+export function Button({ title, className, ...props }: ButtonProps) {
   return (
-    <TouchableOpacity style={styles.container} activeOpacity={0.8} {...props}>
-      <Text style={styles.title}>{title}</Text>
+    <TouchableOpacity
+      activeOpacity={0.8}
+      {...props}
+      className={`h-12 w-full items-center justify-center rounded-lg bg-primary ${className ?? ""}`}
+    >
+      <Text className="text-sm font-semibold text-white">{title}</Text>
     </TouchableOpacity>
   );
 }

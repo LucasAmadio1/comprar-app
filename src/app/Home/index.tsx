@@ -13,7 +13,6 @@ import { Input } from "@/components/Input";
 import { Item } from "@/components/Item";
 import { type ItemStorage, itemsStorage } from "@/storage/itemsStorage";
 import { FilterStatus } from "@/types/FilterStatus";
-import { styles } from "./styles";
 
 const FILTER_STATUS: FilterStatus[] = [FilterStatus.PENDING, FilterStatus.DONE];
 
@@ -96,10 +95,13 @@ export function Home() {
   }, [filter]);
 
   return (
-    <View style={styles.container}>
-      <Image style={styles.logo} source={require("@/assets/logo.png")} />
+    <View className="flex-1 items-center bg-background pt-[62px]">
+      <Image
+        className="h-[34px] w-[134px]"
+        source={require("@/assets/logo.png")}
+      />
 
-      <View style={styles.form}>
+      <View className="mt-[42px] w-full gap-[7px] px-4">
         <Input
           placeholder="O que você precisa comprar?"
           onChangeText={(value) => setDescription(value)}
@@ -109,8 +111,8 @@ export function Home() {
         <Button title="Adicionar" onPress={handleAddItem} />
       </View>
 
-      <View style={styles.content}>
-        <View style={styles.header}>
+      <View className="mt-6 w-full flex-1 rounded-t-3xl bg-white p-6 pt-8">
+        <View className="w-full flex-row gap-3 border-b border-gray-200 pb-3">
           {FILTER_STATUS.map((status) => (
             <Filter
               key={status}
@@ -120,8 +122,8 @@ export function Home() {
             />
           ))}
 
-          <TouchableOpacity style={styles.clearButton} onPress={handleClear}>
-            <Text style={styles.clearText}>Limpar</Text>
+          <TouchableOpacity className="ml-auto" onPress={handleClear}>
+            <Text className="text-xs font-semibold text-gray-400">Limpar</Text>
           </TouchableOpacity>
         </View>
 
@@ -136,10 +138,14 @@ export function Home() {
             />
           )}
           showsVerticalScrollIndicator={false}
-          ItemSeparatorComponent={() => <View style={styles.separator} />}
-          contentContainerStyle={styles.listContent}
+          ItemSeparatorComponent={() => (
+            <View className="my-4 h-px w-full bg-gray-100" />
+          )}
+          contentContainerClassName="pt-6 pb-[62px]"
           ListEmptyComponent={() => (
-            <Text style={styles.empty}>Sua lista está vazia.</Text>
+            <Text className="text-center text-sm text-gray-500">
+              Sua lista está vazia.
+            </Text>
           )}
         />
       </View>
