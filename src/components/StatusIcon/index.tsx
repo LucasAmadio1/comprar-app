@@ -1,4 +1,6 @@
-import { CircleCheck, CircleDashed } from "lucide-react-native";
+import { Check } from "lucide-react-native";
+import { View } from "react-native";
+import { colors } from "@/theme/colors";
 import { FilterStatus } from "@/types/FilterStatus";
 
 interface StatusIconProps {
@@ -7,8 +9,10 @@ interface StatusIconProps {
 
 export function StatusIcon({ status }: StatusIconProps) {
   return status === FilterStatus.DONE ? (
-    <CircleCheck size={18} />
+    <View className="h-[26px] w-[26px] items-center justify-center rounded-full bg-primary">
+      <Check size={15} color={colors.white} strokeWidth={3} />
+    </View>
   ) : (
-    <CircleDashed size={18} />
+    <View className="h-[26px] w-[26px] rounded-full border-2 border-gray-400" />
   );
 }

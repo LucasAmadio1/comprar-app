@@ -7,22 +7,27 @@ export type ItemStorage = {
   id: string;
   status: FilterStatus;
   description: string;
+  quantity: number;
+  price: number;
 };
+
+// Itens salvos antes de existirem quantidade e valor não têm esses campos.
+type StoredItem = Omit<ItemStorage, "quantity" | "price"> &
+  Partial<Pick<ItemStorage, "quantity" | "price">>;
 
 async function get(): Promise<ItemStorage[]> {
   try {
     const storage = await AsyncStorage.getItem(ITEMS_STORAGE_KEY);
+    const items: StoredItem[] = storage ? JSON.parse(storage) : [];
 
-    return storage ? JSON.parse(storage) : [];
+    return items.map((item) => ({
+      ...item,
+      quantity: item.quantity ?? 1,
+      price: item.price ?? 0,
+    }));
   } catch (error) {
     throw new Error(`ITEMS_GET: ${error}`);
   }
-}
-
-async function getByStatus(status: FilterStatus): Promise<ItemStorage[]> {
-  const items = await get();
-
-  return items.filter((item) => item.status === status);
 }
 
 async function save(items: ItemStorage[]): Promise<void> {
@@ -35,29 +40,23 @@ async function save(items: ItemStorage[]): Promise<void> {
 
 async function addItem(newItem: ItemStorage): Promise<ItemStorage[]> {
   const items = await get();
-  const updatedItems = [...items, newItem];
+  const updatedItems = [newItem, ...items];
 
   await save(updatedItems);
 
   return updatedItems;
 }
 
-async function removeItem(id: string): Promise<void> {
+async function removeItem(id: string): Promise<ItemStorage[]> {
   const items = await get();
   const updatedItems = items.filter((item) => item.id !== id);
 
   await save(updatedItems);
+
+  return updatedItems;
 }
 
-async function clear(): Promise<void> {
-  try {
-    await AsyncStorage.removeItem(ITEMS_STORAGE_KEY);
-  } catch (error) {
-    throw new Error(`ITEMS_CLEAR: ${error}`);
-  }
-}
-
-async function toggleStatus(id: string): Promise<void> {
+async function toggleStatus(id: string): Promise<ItemStorage[]> {
   const items = await get();
 
   const updatedItems = items.map((item) =>
@@ -73,13 +72,13 @@ async function toggleStatus(id: string): Promise<void> {
   );
 
   await save(updatedItems);
+
+  return updatedItems;
 }
 
 export const itemsStorage = {
   get,
-  getByStatus,
   addItem,
   removeItem,
-  clear,
   toggleStatus,
 };

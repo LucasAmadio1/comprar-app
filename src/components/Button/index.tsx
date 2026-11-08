@@ -13,9 +13,9 @@ export function Button({ title, className, ...props }: ButtonProps) {
     <TouchableOpacity
       activeOpacity={0.8}
       {...props}
-      className={`h-12 w-full items-center justify-center rounded-lg bg-primary ${className ?? ""}`}
+      className={`h-14 w-full items-center justify-center rounded-2xl bg-primary ${className ?? ""}`}
     >
-      <Text className="text-sm font-semibold text-white">{title}</Text>
+      <Text className="font-sans-extrabold text-base text-white">{title}</Text>
     </TouchableOpacity>
   );
 }

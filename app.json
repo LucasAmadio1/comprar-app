@@ -1,6 +1,6 @@
 {
   "expo": {
-    "name": "comprar-app",
+    "name": "Listup",
     "slug": "comprar-app",
     "version": "1.0.0",
     "orientation": "portrait",
@@ -33,7 +33,8 @@
           "backgroundColor": "#F2F0EF",
           "imageWidth": 200
         }
-      ]
+      ],
+      "expo-font"
     ]
   }
 }
